@@ -5,7 +5,7 @@
         <q-btn flat dense round icon="mdi-menu" aria-label="Menu" @click="toggleNavBar" />
 
         <q-toolbar-title>
-          BackOffice Master Car
+          Master Car
         </q-toolbar-title>
 
       </q-toolbar>
@@ -14,13 +14,13 @@
     <q-drawer v-model="isNavBarOpen" show-if-above bordered class="bg-grey-1">
       <q-scroll-area style="height: calc(100% - 150px); border-right: 1px solid #ddd">
         <q-list padding>
-          <q-item clickable v-ripple>
+          <q-item clickable v-ripple :to="{ name: 'rent.index' }">
             <q-item-section avatar>
-              <q-icon name="mdi-inbox" />
+              <q-icon name="mdi-car" />
             </q-item-section>
 
             <q-item-section>
-              Inbox
+              Alugar Automóvel
             </q-item-section>
           </q-item>
         </q-list>
@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue'
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'MainLayout',

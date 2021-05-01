@@ -15,6 +15,7 @@ module.exports = configure(function (ctx) {
     ],
     extras: [
       'mdi-v5',
+      'material-icons',
       'roboto-font'
     ],
 

@@ -7,6 +7,14 @@ const routes = [
       { path: '', component: () => import('pages/Index.vue') }
     ]
   },
+  {
+    path: '/rent',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [
+      { path: '', name: 'rent.index', component: () => import('pages/rent/CityIndex.vue') },
+      { path: 'automobiles', name: 'rent.automobiles', component: () => import('pages/rent/AutomobileListPage.vue') }
+    ]
+  },
 
   // Always leave this as last one,
   // but you can also remove it
