@@ -16,7 +16,9 @@
           <div class="col-8">
             <q-input label="Data" mask="##/##/####" v-model="withdrawDate" :model-value="withdrawDate">
               <q-popup-proxy ref="withdrawDateProxy"  transition-show="scale" transition-hide="scale">
-                <q-date minimal mask="DD/MM/YYYY" @update:model-value="$refs.withdrawDateProxy.hide()" v-model="withdrawDate" :model-value="withdrawDate"/>
+                <div>
+                  <q-date minimal mask="DD/MM/YYYY" @update:model-value="$refs.withdrawDateProxy.hide()" v-model="withdrawDate" :model-value="withdrawDate"/>
+                </div>
               </q-popup-proxy>
               <template v-slot:append>
                 <q-icon name="mdi-calendar"/>
@@ -43,7 +45,9 @@
           <div class="col-8">
             <q-input label="Data" mask="##/##/####" v-model="depositDate" :model-value="depositDate">
               <q-popup-proxy ref="depositDateProxy"  transition-show="scale" transition-hide="scale">
-                <q-date minimal mask="DD/MM/YYYY" @update:model-value="$refs.depositDate.hide()" v-model="depositDate" :model-value="depositDate"/>
+                <div>
+                  <q-date minimal mask="DD/MM/YYYY" @update:model-value="$refs.depositDateProxy.hide()" v-model="depositDate" :model-value="depositDate"/>
+                </div>
               </q-popup-proxy>
               <template v-slot:append>
                 <q-icon name="mdi-calendar"/>

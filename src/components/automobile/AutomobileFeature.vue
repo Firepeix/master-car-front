@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="feature">
     <div>
       <q-icon class="icon" :name="icon"/>
     </div>
@@ -26,6 +26,8 @@ export default defineComponent({
 </script>
 
 <style scoped lang="sass">
+.feature
+  flex-basis: 50%
 .title
   font-weight: 400
   font-size: 12px

@@ -1,5 +1,5 @@
 <template>
-  <q-card flat bordered class="automobile">
+  <q-card flat bordered :class="['automobile', {'can-hover': price}]">
     <q-card-section class="q-pa-sm">
       <div class="row">
         <div class="col">
@@ -14,14 +14,14 @@
           <img src="https://www.localiza.com/brasil-site/geral/Frota/MOBI.png" alt="car">
         </div>
         <q-separator vertical/>
-        <div class="col-5 features">
+        <div class="col features">
           <automobile-feature icon="mdi-snowflake" title="Ar-Condicionado"/>
           <automobile-feature icon="mdi-car-door" title="4 Portas"/>
           <automobile-feature icon="mdi-car-shift-pattern" title="Cambio Manual"/>
           <automobile-feature icon="mdi-car-seat" title="5 Assentos"/>
         </div>
-        <q-separator vertical/>
-        <div class="col text-center price-section">
+        <q-separator vertical  v-if="price"/>
+        <div class="col-3 text-center price-section" v-if="price">
           <div class="subtitle">
             A Partir De
           </div>
@@ -41,14 +41,21 @@ import AutomobileFeature from 'components/automobile/AutomobileFeature';
 
 export default defineComponent({
   name: 'Automobile',
+  props: {
+    price: {
+      type: Boolean,
+      default: true
+    }
+  },
   components: { AutomobileFeature }
 });
 </script>
 
 <style scoped lang="sass">
 .automobile
-  cursor: pointer
-  &:hover
+  &.can-hover
+    cursor: pointer
+  &.can-hover:hover
     box-shadow: 0 0 10px 0 rgb(0 0 0 / 15%) !important
   img
     width: 100%

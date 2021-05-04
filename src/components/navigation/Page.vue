@@ -3,11 +3,14 @@
     <div class="row full-width q-pa-lg">
       <div class="col">
         <q-card>
-          <q-card-section v-if="title !== ''" class="title-page q-pb-sm">
+          <q-card-section v-if="title !== ''" class="title-page q-pb-md">
             <div class="row">
               <div class="col-5 title-card" style="height: 36px">
                 <q-icon :name="icon" style="margin-right: 10px"/>
                 <span style="height: 23px"> {{ title }}</span>
+              </div>
+              <div class="col actions">
+                <slot name="actions" />
               </div>
             </div>
           </q-card-section>
@@ -46,6 +49,9 @@ export default defineComponent({
   i
     font-size: 2rem
     vertical-align: sub
+.actions
+  display: flex
+  justify-content: flex-end
 </style>
 <style lang="sass">
 .page-content
