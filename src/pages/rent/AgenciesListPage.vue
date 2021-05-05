@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, inject, ref } from 'vue';
 import Page from 'components/navigation/Page';
 import Automobile from 'components/automobile/Automobile';
 import Cart from 'components/rent/Cart';
@@ -51,20 +51,25 @@ export default defineComponent({
     Page
   },
   setup () {
-    const agencies = {
-      withdraw: [
-        {id: "AACON", description: 'ROD. LMG 800, KM 3, GOIABEIRAS'},
-        {id: "AACAI", description: 'AV PRESIDENTE CARLOS LUZ, 561, CAICARAS'},
-        {id: "AABHZ", description: 'AV CRISTIANO MACHADO, 2875, IPIRANGA'},
-        {id: "AABRA", description: 'AV OLINTO MEIRELES, 440, BARREIRO'},
-        {id: "AAPAM", description: 'AV PROFESSOR MAGALHAES PENIDO, 269, PAMPULHA'}
-      ],
+    const agencyRepository = inject('agencyRepository')
+    const agencies = ref({
+      withdraw: [],
       deposit: []
-    };
+    });
+
+    const setUpAgencies = async () => {
+      const newAgencies = await agencyRepository.getAgencies()
+      agencies.value.withdraw = newAgencies
+      agencies.value.deposit = newAgencies
+    }
+
     const selectedAgencyId = ref(null);
     const selectAgency = (id) => {
       selectedAgencyId.value = id;
     };
+
+    setUpAgencies()
+
     return {
       agencies,
       selectedAgencyId,

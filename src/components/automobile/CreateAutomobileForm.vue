@@ -1,48 +1,101 @@
 <template>
-<q-form>
-  <div class="row q-col-gutter-xl">
-    <div class="col-6">
-      <q-input label="Nome Do Veiculo" v-model="name" :model-value="name" />
+  <q-form>
+    <div class="row q-col-gutter-xl">
+      <div class="col-6">
+        <q-input label="Nome Do Veiculo" v-model="name" :model-value="name"/>
+      </div>
+      <div class="col-6">
+        <q-select v-model="group" option-label="name" :options="availableGroups" label="Grupo" :model-value="group">
+          <template #option="scope">
+            <q-item v-bind="scope.itemProps">
+              <q-item-section>
+                <q-item-label>{{ scope.opt.name }} - {{ scope.opt.description }}</q-item-label>
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+      </div>
     </div>
-    <div class="col-6">
-      <q-select v-model="group" option-label="name" :options="availableGroups" label="Grupo"  :model-value="group"/>
+    <div class="row q-col-gutter-xl q-mt-md">
+      <div class="col-6 q-pt-none">
+        <q-select v-model="features" multiple option-label="description" :options="availableFeatures" label="Funcionalidades" :model-value="features">
+          <template v-slot:option="scope">
+            <q-item v-bind="scope.itemProps">
+              <q-item-section avatar>
+                <q-icon :name="scope.opt.icon"/>
+              </q-item-section>
+              <q-item-section>
+                <q-item-label v-html="scope.opt.description"/>
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-select>
+      </div>
+      <div class="col-6 q-pt-none">
+        <q-file v-model="thumbnail" label="Thumbnail" :model-value="thumbnail">
+          <template v-slot:prepend>
+            <q-icon name="attach_file"/>
+          </template>
+        </q-file>
+      </div>
     </div>
-  </div>
-</q-form>
+    <div class="row q-mt-md">
+      <div class="col">
+        <availability-form ref="availabilityForm"/>
+      </div>
+    </div>
+  </q-form>
 </template>
 
 <script>
-import { ref } from 'vue';
+import { inject, onMounted, ref } from 'vue';
+import AvailabilityForm from 'components/automobile/AvailabilityForm';
 
 export default {
   name: 'CreateAutomobileForm',
+  components: { AvailabilityForm },
   setup () {
-    //nome
-    //imagem
-    //group
-    //select de features
-    //agencias que ele esta disponivel
-    //id externo
-    //id externo
-    //id unico : id do carro + agencia
-    //  preço minimo -
-    //  em manutenção
-    const name = ref(null)
-    const group = ref(null)
-    const getAvailableGroups = () => {
-      return [
-        {name: 'A', description: 'Baratos'},
-        {name: 'B', description: 'Sedan'},
-        {name: 'C', description: 'SUVs'},
-        {name: 'D', description: 'Hatch'},
-        {name: 'E', description: 'Especiais'}
-      ]
+    const automobileRepository = inject('automobileRepository')
+    const name = ref(null);
+    const group = ref(null);
+    const availableGroups = ref([]);
+    const setGroups = async () => {
+      availableGroups.value = await automobileRepository.getGroups()
+    };
+
+    onMounted(setGroups)
+
+    const thumbnail = ref(null);
+    const features = ref(null);
+    const availableFeatures = ref([]);
+    const setFeatures = async () => {
+      availableFeatures.value = await automobileRepository.getAvailableFeatures()
+    };
+
+    onMounted(setFeatures)
+
+    const availabilityForm = ref(null)
+
+    const getAutomobileTemplate = () => {
+      return {
+        name: name.value,
+        group: group.value,
+        thumbnail: thumbnail.value,
+        features: features.value,
+        availability: availabilityForm.value.getAvailability()
+      }
     }
+
     return {
       name,
       group,
-      availableGroups: getAvailableGroups()
-    }
+      availableGroups,
+      thumbnail,
+      features,
+      availableFeatures,
+      availabilityForm,
+      getAutomobileTemplate
+    };
   }
 };
 </script>
