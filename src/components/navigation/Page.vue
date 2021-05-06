@@ -57,7 +57,7 @@ export default defineComponent({
 .page-content
   & > div:first-child
     padding-top: 16px
-  & > div
+  & > div:not(.no-page-padding)
     padding-left: 16px
     padding-right: 16px
   & > div:last-child

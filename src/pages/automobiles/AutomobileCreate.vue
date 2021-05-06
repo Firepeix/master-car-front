@@ -25,11 +25,16 @@ export default defineComponent({
   name: 'AutomobileIndex',
   setup () {
     const automobileRepository = inject('automobileRepository')
+    const notifyService = inject('notifyService')
+    const router = inject('router')
     const form = ref(null)
     const saveAutomobile = async () => {
       const template = form.value.getAutomobileTemplate()
-      const response = await automobileRepository.saveAutomobileTemplate(template)
-      console.log(response);
+      const done = notifyService.loading()
+      await automobileRepository.saveAutomobileTemplate(template)
+      done()
+      notifyService.success('Automóveis incluídos com sucesso!')
+      router.value.push({ name: 'automobiles.index' })
     }
 
     return {

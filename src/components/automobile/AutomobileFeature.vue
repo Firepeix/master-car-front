@@ -1,5 +1,5 @@
 <template>
-  <div class="feature">
+  <div :class="featureClass">
     <div>
       <q-icon class="icon" :name="icon"/>
     </div>
@@ -8,10 +8,21 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { computed, defineComponent } from 'vue';
 
 export default defineComponent({
   name: 'AutomobileFeature',
+  setup (props) {
+    const featureClass = computed(() => {
+      return {
+        feature: true,
+        big: props.size === 'lg'
+      }
+    })
+    return {
+      featureClass
+    }
+  },
   props: {
     icon: {
       type: String,
@@ -20,6 +31,10 @@ export default defineComponent({
     title: {
       type: String,
       default: 'Ar Condicionado'
+    },
+    size: {
+      type: String,
+      default: 'md'
     }
   }
 });
@@ -35,4 +50,11 @@ export default defineComponent({
 .icon
   font-size: 26px
   padding-bottom: 1px
+.big
+  flex-basis: auto
+  .icon
+    font-size: 2.5rem
+  .title
+    font-size: 16px
+    font-weight: 700
 </style>

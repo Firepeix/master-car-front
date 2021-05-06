@@ -5,6 +5,7 @@
     </template>
     <div class="row q-pb-md">
       <div class="col">
+        <automobile-template-table :automobiles="automobiles" />
       </div>
     </div>
     <q-separator class="q-mb-md" />
@@ -12,12 +13,24 @@
 </template>
 
 <script>
-import { defineComponent } from 'vue';
+import { defineComponent, inject, onMounted, ref } from 'vue';
 import Page from 'components/navigation/Page';
+import AutomobileTemplateTable from 'components/automobile/AutomobileTemplateTable';
 
 export default defineComponent({
   name: 'AutomobileIndex',
-  components: {Page}
+  setup () {
+    const automobileRepository = inject('automobileRepository')
+    const automobiles = ref([])
+    const setAutomobiles = async () => {
+      automobiles.value = await automobileRepository.getAutomobiles()
+    }
+    onMounted(setAutomobiles)
+    return {
+      automobiles
+    }
+  },
+  components: { AutomobileTemplateTable, Page}
 });
 </script>
 

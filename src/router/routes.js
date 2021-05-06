@@ -23,6 +23,8 @@ const routes = [
     children: [
       { path: '', name: 'automobiles.index', component: () => import('pages/automobiles/AutomobileIndex') },
       { path: 'create', name: 'automobiles.create', component: () => import('pages/automobiles/AutomobileCreate') },
+      { path: 'show/:id', name: 'automobiles.show', component: () => import('pages/automobiles/AutomobileShow') },
+      { path: 'edit/:id', name: 'automobiles.edit', component: () => import('pages/automobiles/AutomobileEdit') },
     ]
   },
 

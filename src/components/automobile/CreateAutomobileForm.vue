@@ -39,7 +39,7 @@
         </q-file>
       </div>
     </div>
-    <div class="row q-mt-md">
+    <div class="row q-mt-md" v-show="!edit">
       <div class="col">
         <availability-form ref="availabilityForm"/>
       </div>
@@ -48,16 +48,16 @@
 </template>
 
 <script>
-import { inject, onMounted, ref } from 'vue';
+import { defineComponent, inject, onMounted, ref } from 'vue';
 import AvailabilityForm from 'components/automobile/AvailabilityForm';
 
-export default {
+export default defineComponent({
   name: 'CreateAutomobileForm',
   components: { AvailabilityForm },
-  setup () {
+  setup (props) {
     const automobileRepository = inject('automobileRepository')
-    const name = ref(null);
-    const group = ref(null);
+    const name = ref(props.edit ? props.savedAutomobile.name : null);
+    const group = ref(props.edit ? props.savedAutomobile.group.data : null);
     const availableGroups = ref([]);
     const setGroups = async () => {
       availableGroups.value = await automobileRepository.getGroups()
@@ -66,10 +66,15 @@ export default {
     onMounted(setGroups)
 
     const thumbnail = ref(null);
-    const features = ref(null);
+    const features = ref(props.edit ? props.savedAutomobile.features.data : null);
     const availableFeatures = ref([]);
     const setFeatures = async () => {
       availableFeatures.value = await automobileRepository.getAvailableFeatures()
+      if (props.edit) {
+        availableFeatures.value = availableFeatures.value.filter(feature => {
+          return features.value.find(newFeature => feature.description === newFeature.description) === undefined
+        }).concat(features.value)
+      }
     };
 
     onMounted(setFeatures)
@@ -82,7 +87,7 @@ export default {
         group: group.value,
         thumbnail: thumbnail.value,
         features: features.value,
-        availability: availabilityForm.value.getAvailability()
+        availability: props.edit ? [] : availabilityForm.value.getAvailability()
       }
     }
 
@@ -96,8 +101,22 @@ export default {
       availabilityForm,
       getAutomobileTemplate
     };
+  },
+  props: {
+    edit: {
+      type: Boolean,
+      default: false
+    },
+    savedAutomobile: {
+      type: Object,
+      default () {
+        return {
+
+        }
+      }
+    }
   }
-};
+});
 </script>
 
 <style scoped>

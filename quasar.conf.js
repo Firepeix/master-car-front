@@ -44,7 +44,9 @@ module.exports = configure(function (ctx) {
       config: {},
       // iconSet: 'material-icons', // Quasar icon set
       lang: 'pt-BR', // Quasar language pack
-      plugins: []
+      plugins: [
+        'Notify'
+      ]
     },
 
     animations:  'all',
