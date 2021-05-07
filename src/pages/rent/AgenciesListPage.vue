@@ -3,8 +3,8 @@
     <div class="row q-pb-md q-col-gutter-lg">
       <div class="col">
         <div class="row">
-          <div class="col">
-            <automobile :price="false"/>
+          <div class="col" v-if="isLoaded">
+            <automobile :automobile="automobile" :price="false"/>
           </div>
         </div>
         <div class="row q-mt-lg">
@@ -18,23 +18,23 @@
               <q-separator class="q-mb-lg"/>
               <div class="row q-pr-md q-pl-md q-pb-md">
                 <div class="col agencies">
-                  <agency :selected="selectedAgencyId === agency.id" v-for="agency in agencies.withdraw"
-                          :key="agency.id" :id="agency.id" :name="agency.description" @select="selectAgency"/>
+                  <agency :selected="selectedAgency.token === agency.token" v-for="agency in agencies.withdraw" :criteria="criteria" :agency="agency"
+                          :key="agency.id" :id="agency.id" :name="agency.description" @select="selectAgency(agency)"/>
                 </div>
               </div>
             </q-card>
           </div>
         </div>
       </div>
-      <div class="col-4">
-        <cart/>
+      <div class="col-4" v-if="isLoaded">
+        <cart should-have-agency :chosen-agency="selectedAgency" :chosen-automobile="automobile" :criteria="criteria"/>
       </div>
     </div>
   </page>
 </template>
 
 <script>
-import { defineComponent, inject, ref } from 'vue';
+import { defineComponent, inject, onMounted, ref, watch } from 'vue';
 import Page from 'components/navigation/Page';
 import Automobile from 'components/automobile/Automobile';
 import Cart from 'components/rent/Cart';
@@ -51,29 +51,48 @@ export default defineComponent({
     Page
   },
   setup () {
-    const agencyRepository = inject('agencyRepository')
+    const searchService = inject('searchService')
     const agencies = ref({
       withdraw: [],
       deposit: []
     });
+    const isLoaded = ref(false)
+    const searchId = ref(null)
+    const criteria = ref(null)
+    const automobile = ref({ })
+    const route = inject('route');
 
-    const setUpAgencies = async () => {
-      const newAgencies = await agencyRepository.getAgencies()
-      agencies.value.withdraw = newAgencies
-      agencies.value.deposit = newAgencies
+    const setUpAgencies = async (id, groupId) => {
+      const response = await searchService.getAgencies(id, groupId)
+      agencies.value.withdraw = response.agencies
+      automobile.value = response.automobile
+      criteria.value = response.criteria
+      isLoaded.value = true
+      searchId.value = id
     }
 
-    const selectedAgencyId = ref(null);
-    const selectAgency = (id) => {
-      selectedAgencyId.value = id;
+    let selectedAgency = ref({  });
+    const selectAgency = (agency) => {
+      selectedAgency.value = agency;
     };
 
-    setUpAgencies()
+
+    watch(route, (route) => {
+      if (searchId.value === null || (route.params.id !== undefined && searchId.value !== Number(route.params.id))) {
+        setUpAgencies(route.params.id, route.params.groupId)
+      }
+    })
+
+
+    onMounted(() => setUpAgencies(route.value.params.id, route.value.params.groupId))
 
     return {
       agencies,
-      selectedAgencyId,
-      selectAgency
+      selectedAgency,
+      selectAgency,
+      automobile,
+      isLoaded,
+      criteria
     };
   }
 });

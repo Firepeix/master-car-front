@@ -1,7 +1,7 @@
 <template>
   <q-page class="flex">
-    <div class="row full-width q-pa-lg">
-      <div class="col">
+    <div class="row full-width justify-center q-pa-lg">
+      <div class="col col-lg-6">
         <q-card>
           <q-card-section v-if="title !== ''" class="title-page q-pb-md">
             <div class="row">

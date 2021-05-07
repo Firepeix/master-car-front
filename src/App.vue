@@ -7,6 +7,7 @@ import AgencyRepository from 'src/repositories/AgencyRepository';
 import AutomobileRepository from 'src/repositories/AutomobileRepository';
 import { api } from 'boot/axios';
 import NotifyService from 'src/services/NotifyService';
+import SearchService from 'src/services/SearchService';
 
 export default defineComponent({
   name: 'App',
@@ -15,6 +16,7 @@ export default defineComponent({
     const router = ref(null)
     provide('agencyRepository', new AgencyRepository(api))
     provide('automobileRepository', new AutomobileRepository(api))
+    provide('searchService', new SearchService(api))
     provide('notifyService', new NotifyService())
     provide('router', router)
     provide('route', route)

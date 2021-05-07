@@ -78,13 +78,28 @@ export default defineComponent({
     const depositTime = ref(null)
     const getTimeOptions = () => {
       const times = [];
-      new Array(24).fill(null).forEach((empty, index) => {
-        times.push(`${index}:00`)
-        times.push(`${index}:30`)
+      new Array(10).fill(null).forEach((empty, index) => {
+        times.push(`${index + 8}:00`)
+        times.push(`${index + 8}:30`)
       })
 
       return times;
     };
+
+    const getSearch = () => {
+      if (withdrawCity.value !== null && depositCity.value !== null) {
+        const withdraw = `${withdrawDate.value.split('/').reverse().join('-')} ${withdrawTime.value}:00`
+        const deposit = `${depositDate.value.split('/').reverse().join('-')} ${depositTime.value}:00`
+        return {
+          withdrawDestinationId: withdrawCity.value.id,
+          depositDestinationId: depositCity.value.id,
+          withdrawDate: withdraw,
+          depositDate: deposit
+        }
+      }
+      return null;
+    }
+
     return {
       cityOptions,
       withdrawDate,
@@ -93,7 +108,8 @@ export default defineComponent({
       depositCity,
       withdrawTime,
       depositTime,
-      timeOptions: getTimeOptions()
+      timeOptions: getTimeOptions(),
+      getSearch
     }
   }
 });

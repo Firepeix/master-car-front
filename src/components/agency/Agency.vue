@@ -3,10 +3,10 @@
     <q-card-section class="q-pa-sm">
       <div class="row flex justify-between">
         <div class="col">
-          {{ name }}
+          {{ agency.automobiles.data[0].template.data.name }} - {{ name }}
         </div>
         <div class="col-3 text-right">
-          R$ 462,00
+          R$ {{ numberPrimitive.toReal(agency.price * criteria.daily)}}
         </div>
       </div>
     </q-card-section>
@@ -15,10 +15,12 @@
 
 <script>
 import { computed, defineComponent } from 'vue';
+import NumberPrimitive from 'src/Primitives/NumberPrimitive';
 
 export default defineComponent({
   name: 'Agency',
   setup (props) {
+
     const agencyClass = computed(() => {
       return {
         agency: true,
@@ -27,17 +29,35 @@ export default defineComponent({
     })
 
     return {
-      agencyClass
+      agencyClass,
+      numberPrimitive: NumberPrimitive
+
     }
   },
   props: {
     id: {
-      type: String,
-      default: ''
+      type: Number,
+      default: 0
     },
     name: {
       type: String,
       default: ''
+    },
+    agency: {
+      type: Object,
+      default () {
+        return {
+
+        }
+      }
+    },
+    criteria: {
+      type: Object,
+      default () {
+        return {
+
+        }
+      }
     },
     selected: {
       type: Boolean,

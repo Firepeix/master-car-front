@@ -1,23 +1,23 @@
 <template>
 <div class="resume">
-  <div class="title">
-    <div>Grupo: B</div>
+  <div class="title" v-if="chosenGroup !== ''">
+    <div>Grupo: {{ chosenGroup }}</div>
   </div>
-  <div class="body">
-    <div id="daily"><span>Total de Diárias:</span><span>8</span></div>
+  <div class="body" :style="`${chosenGroup !== '' ? '' : ' border-top: solid #9e9e9e 1px'}`">
+    <div id="daily"><span>Total de Diárias:</span><span>{{ criteria.daily }}</span></div>
     <q-separator class="q-mt-sm q-mb-sm"/>
     <div id="withdraw" class="criteria">
       <div class="type"><q-icon class="icon" name="mdi-car-hatchback "/> Retirada</div>
       <div class="datetime">
-        <div class="time"><q-icon name="mdi-clock-outline" /> <span> 12:00H</span></div>
-        <div class="date"><span>13/05/2021</span></div>
+        <div class="time"><q-icon name="mdi-clock-outline" /> <span> {{ criteria.withdrawDate.split(' ')[1].slice(0, 5) }}H</span></div>
+        <div class="date"><span>{{ criteria.withdrawDate.split(' ')[0].split('-').reverse().join('/') }}</span></div>
       </div>
     </div>
     <div id="deposit" class="criteria">
       <div class="type"> <q-icon class="icon" name="mdi-car-hatchback "/> Devolução</div>
       <div class="datetime">
-        <div class="time"><q-icon name="mdi-clock-outline" /> <span> 12:00H</span></div>
-        <div class="date"><span>21/05/2021</span></div>
+        <div class="time"><q-icon name="mdi-clock-outline" /> <span> {{ criteria.depositDate.split(' ')[1].slice(0, 5) }}H</span></div>
+        <div class="date"><span>{{ criteria.depositDate.split(' ')[0].split('-').reverse().join('/') }}</span></div>
       </div>
     </div>
   </div>
@@ -28,7 +28,21 @@
 import { defineComponent } from 'vue';
 
 export default defineComponent({
-  name: 'CartResume'
+  name: 'CartResume',
+  props: {
+    criteria: {
+      type: Object,
+      default () {
+        return {
+
+        }
+      }
+    },
+    chosenGroup: {
+      type: String,
+      default: ''
+    }
+  },
 });
 </script>
 

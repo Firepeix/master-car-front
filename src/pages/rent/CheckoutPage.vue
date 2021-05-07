@@ -3,8 +3,8 @@
     <div class="row q-pb-md q-col-gutter-lg">
       <div class="col">
         <div class="row">
-          <div class="col">
-            <automobile :price="false"/>
+          <div class="col" v-if="isLoaded">
+            <automobile :automobile="automobile" :price="false"/>
           </div>
         </div>
         <div class="row q-mt-lg">
@@ -42,15 +42,15 @@
           </div>
         </div>
       </div>
-      <div class="col-4">
-        <cart/>
+      <div class="col-4" v-if="isLoaded">
+        <cart final should-have-agency :chosen-agency="agency" :chosen-automobile="automobile" :criteria="criteria"/>
       </div>
     </div>
   </page>
 </template>
 
 <script>
-import { defineComponent, ref } from 'vue';
+import { defineComponent, inject, onMounted, ref, watch } from 'vue';
 import Page from 'components/navigation/Page';
 import Automobile from 'components/automobile/Automobile';
 import Cart from 'components/rent/Cart';
@@ -83,10 +83,43 @@ export default defineComponent({
     const selectAgency = (id) => {
       selectedAgencyId.value = id;
     };
+    const searchService = inject('searchService')
+
+    const isLoaded = ref(false)
+    const searchId = ref(null)
+    const criteria = ref(null)
+    const automobile = ref({ })
+    const agency = ref({ })
+    const route = inject('route');
+
+    const setUpCheckout = async (id, groupId, agencyId) => {
+      const response = await searchService.getCheckout(id, groupId, agencyId)
+      agency.value = response.agency
+      automobile.value = response.automobile
+      criteria.value = response.criteria
+      isLoaded.value = true
+      searchId.value = id
+    }
+
+    watch(route, (route) => {
+      if (searchId.value === null || (route.params.id !== undefined && searchId.value !== Number(route.params.id))) {
+        setUpCheckout(route.params.id, route.params.groupId, route.agencyId)
+      }
+    })
+
+
+    onMounted(() => setUpCheckout(route.value.params.id, route.value.params.groupId, route.value.params.agencyId))
+
+
     return {
       agencies,
       selectedAgencyId,
-      selectAgency
+      selectAgency,
+      isLoaded,
+      searchId,
+      criteria,
+      automobile,
+      agency,
     };
   }
 });

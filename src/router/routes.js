@@ -12,9 +12,9 @@ const routes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '', name: 'rent.index', component: () => import('pages/rent/CityIndex.vue') },
-      { path: 'automobiles', name: 'rent.automobiles', component: () => import('pages/rent/AutomobileListPage.vue') },
-      { path: 'agencies', name: 'rent.agencies', component: () => import('pages/rent/AgenciesListPage.vue') },
-      { path: 'checkout', name: 'rent.checkout', component: () => import('pages/rent/CheckoutPage.vue') }
+      { path: ':id/automobiles', name: 'rent.automobiles', component: () => import('pages/rent/AutomobileListPage.vue') },
+      { path: ':id/agencies/:groupId', name: 'rent.agencies', component: () => import('pages/rent/AgenciesListPage.vue') },
+      { path: ':id/checkout/:groupId/:agencyId', name: 'rent.checkout', component: () => import('pages/rent/CheckoutPage.vue') }
     ]
   },
   {

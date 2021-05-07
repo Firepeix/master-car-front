@@ -16,7 +16,7 @@ export default defineComponent({
   display: flex
   align-items: center
   justify-content: center
-  font-size: 2rem
+  font-size: 1.5rem
   text-transform: uppercase
   font-weight: 800
   background-color: #e6e6e6

@@ -38,6 +38,11 @@ export default class AutomobileRepository {
     return response.data;
   }
 
+  async deleteTemplate (id) {
+    const response = await this.api.delete(`automobiles/${id}`);
+    return response.data;
+  }
+
   async saveAutomobileTemplate (template) {
     const body = this.makeBody(template, await this.toBase64(template.thumbnail));
     const response = await this.api.post('automobiles', body);
