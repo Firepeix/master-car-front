@@ -38,6 +38,11 @@ export default class AutomobileRepository {
     return response.data;
   }
 
+  async sentToMaintenance (id, templateId) {
+    const response = await this.api.put(`automobiles/${templateId}/automobile/${id}/send-maintenance`);
+    return response.data;
+  }
+
   async deleteTemplate (id) {
     const response = await this.api.delete(`automobiles/${id}`);
     return response.data;

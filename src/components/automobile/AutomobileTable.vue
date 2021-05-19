@@ -2,7 +2,7 @@
   <q-table :rows="automobiles" flat bordered :columns="columns" row-key="id">
     <template v-slot:body-cell-status="props">
       <q-td :props="props">
-        <automobile-status :id="props.row.status" />
+        <automobile-status :key="`status-${props.row.status}`" :id="props.row.status" />
       </q-td>
     </template>
     <template v-slot:body-cell-actions="props">
@@ -15,11 +15,18 @@
             <q-item-section>Alocar Uso</q-item-section>
           </q-item>
           <q-separator />
-          <q-item clickable v-close-popup>
+          <q-item clickable @click="sentToMaintenance(props.row)" v-close-popup>
             <q-item-section avatar>
-              <q-icon name="mdi-car-off"/>
+              <q-icon name="mdi-car-cog"/>
             </q-item-section>
             <q-item-section>Enviar para Manutenção</q-item-section>
+          </q-item>
+          <q-separator />
+          <q-item clickable v-close-popup>
+            <q-item-section avatar>
+              <q-icon name="mdi-car-wash"/>
+            </q-item-section>
+            <q-item-section>Enviar Lava Jato</q-item-section>
           </q-item>
           <q-separator />
           <q-item clickable @click="deleteAutomobile(props.row)" v-close-popup>
@@ -52,9 +59,20 @@ export default defineComponent({
       notifyService.success('Automóvel deletado com sucesso! ')
       context.emit('update')
     }
+
+    const sentToMaintenance = async automobile => {
+      const done = notifyService.loading()
+      await automobileRepository.sentToMaintenance(automobile.id, automobile.templateId)
+      done()
+      notifyService.success('Enviado para manutenção com sucesso! ')
+      context.emit('update')
+    }
+
+
     return {
       columns: automobileRepository.getAutomobileColumns(),
-      deleteAutomobile
+      deleteAutomobile,
+      sentToMaintenance
     };
   },
   props: {

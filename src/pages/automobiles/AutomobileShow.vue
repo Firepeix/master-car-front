@@ -12,7 +12,7 @@
     </template>
     <div class="row q-pb-md no-page-padding">
       <div class="col">
-        <automobile-template @update="update" :automobile="automobile"  v-if="isLoaded" />
+        <automobile-template :key="automobile.id" @update="update" :automobile="automobile"  v-if="isLoaded" />
       </div>
     </div>
   </page>
