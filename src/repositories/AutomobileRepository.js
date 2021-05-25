@@ -22,7 +22,7 @@ export default class AutomobileRepository {
   }
 
   async findAutomobile (id) {
-    const include = 'group,automobiles.agency,features';
+    const include = 'group,automobiles.agency,features,services';
     const response = await this.api.get(`automobiles/${id}`, { params: { include } });
     return response.data.data;
   }
@@ -38,13 +38,13 @@ export default class AutomobileRepository {
     return response.data;
   }
 
-  async sentToMaintenance (id, templateId) {
-    const response = await this.api.put(`automobiles/${templateId}/automobile/${id}/send-maintenance`);
+  async sentToMaintenance (id, templateId, serviceId) {
+    const response = await this.api.put(`automobiles/${templateId}/automobile/${id}/send-maintenance`, { serviceId });
     return response.data;
   }
 
-  async sendToWash (id, templateId) {
-    const response = await this.api.put(`automobiles/${templateId}/automobile/${id}/send-to-wash`);
+  async sendToWash (id, templateId, serviceId) {
+    const response = await this.api.put(`automobiles/${templateId}/automobile/${id}/send-to-wash`, { serviceId });
     return response.data;
   }
 

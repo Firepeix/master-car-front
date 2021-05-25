@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { defineComponent, inject, onMounted, ref, watch } from 'vue';
+import { defineComponent, inject, onMounted, provide, ref, watch } from 'vue';
 import Page from 'components/navigation/Page';
 import AutomobileTemplate from 'components/automobile/AutomobileTemplate';
 
@@ -32,11 +32,12 @@ export default defineComponent({
     const route = inject('route');
     const automobile = ref(null)
     const isLoaded = ref(false)
-
+    const services = ref([]);
 
     const setAutomobile = async (id) => {
       automobile.value = await automobileRepository.findAutomobile(id)
       isLoaded.value = true
+      services.value = automobile.value.services ? automobile.value.services.data : []
     }
 
     watch(route, (route) => {
@@ -54,6 +55,7 @@ export default defineComponent({
     }
 
     onMounted(() => setAutomobile(route.value.params.id))
+    provide('automobileServices', services)
     return {
       automobile,
       isLoaded,
