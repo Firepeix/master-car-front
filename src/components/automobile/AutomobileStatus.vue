@@ -13,7 +13,8 @@ export default defineComponent({
     const STATUS = {
       1: { color: '#21BA45', label: 'Disponível' },
       2: { color: '#7460ee', label: 'Em Uso' },
-      3: { color: '#ef6c00', label: 'Em Manutenção' }
+      3: { color: '#ef6c00', label: 'Em Manutenção' },
+      4: { color: '#0078ef', label: 'Na Lava Jato' }
     }
 
     const color = STATUS[props.id].color

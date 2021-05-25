@@ -22,7 +22,7 @@
             <q-item-section>Enviar para Manutenção</q-item-section>
           </q-item>
           <q-separator />
-          <q-item clickable v-close-popup>
+          <q-item clickable @click="sendToWash(props.row)" v-close-popup>
             <q-item-section avatar>
               <q-icon name="mdi-car-wash"/>
             </q-item-section>
@@ -68,11 +68,20 @@ export default defineComponent({
       context.emit('update')
     }
 
+    const sendToWash = async automobile => {
+      const done = notifyService.loading()
+      await automobileRepository.sendToWash(automobile.id, automobile.templateId)
+      done()
+      notifyService.success('Enviado para lavar com sucesso! ')
+      context.emit('update')
+    }
+
 
     return {
       columns: automobileRepository.getAutomobileColumns(),
       deleteAutomobile,
-      sentToMaintenance
+      sentToMaintenance,
+      sendToWash
     };
   },
   props: {
